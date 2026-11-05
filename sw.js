@@ -1,6 +1,6 @@
 // Service Worker für Prost – Bierzähler
 // Version bei jeder Änderung hochzählen, damit Geräte die neue Version holen.
-const CACHE = "tafelrunde-v15";
+const CACHE = "tafelrunde-v16";
 const SHELL = [
   "./",
   "./index.html",
@@ -109,11 +109,22 @@ self.addEventListener("notificationclick", (e) => {
     return;
   }
 
-  // Normaler Klick – App öffnen/fokussieren
+  // Normaler Klick – App öffnen/fokussieren + Reaktions-Popup bei Bier
   e.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
-      for (const c of list) { if ("focus" in c) return c.focus(); }
-      if (self.clients.openWindow) return self.clients.openWindow(target);
+      const isBeer = data.type === "beer" && data.room && data.player;
+      if (list.length > 0) {
+        const c = list[0];
+        if (isBeer) {
+          c.postMessage({ type: "SHOW_REACTION", room: data.room, player: data.player });
+        }
+        if ("focus" in c) return c.focus();
+      }
+      if (self.clients.openWindow) {
+        // Wenn kein Fenster offen: URL mit Reaktionsdaten öffnen
+        const url = isBeer ? `./?react_room=${encodeURIComponent(data.room)}&react_player=${encodeURIComponent(data.player)}` : target;
+        return self.clients.openWindow(url);
+      }
     })
   );
 });
