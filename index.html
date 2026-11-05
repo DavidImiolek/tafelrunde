@@ -890,7 +890,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
    1) HIER DEINE SUPABASE-DATEN EINTRAGEN
    (Project Settings → Data API / API Keys)
 ============================================================ */
-const VAPID_PUBLIC_KEY = "BAWFbv-1009OmG8VA1LiNI4XBblzcLpzpFm-R_uqJYtky3yYqVCCa0ZuIAofIXNU6mzxn7M0rkTQL3sRqmS_NQ0";
+const VAPID_PUBLIC_KEY = "BI0qGG8MH6NFtc3n96GoXTjr_1WRPNRb-6hm580-F-P5t6ZgYjC2iDQECAonOMfk26c2c_vdv-pHfF7M1YJ9rzk";
 const SUPABASE_URL = "https://kxaeumlmoezythuencbj.supabase.co";          // z. B. https://abcd1234.supabase.co
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4YWV1bWxtb2V6eXRodWVuY2JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MjE5ODUsImV4cCI6MjEwMTQ5Nzk4NX0.rLXaHHcZOre9eEP_J6nxMUVsez_MiM2LDaO24sSaXDM";  // der "anon / public" Key
 /* ============================================================ */
@@ -3420,6 +3420,13 @@ $("rooms").addEventListener("click",(e)=>{
   $("room").value = r||"";
   if(r && n) enterRoom(r,n);
 })();
+
+/* ---------- Bei Rückkehr in den Vordergrund neu laden (iPhone PWA Fix) ---------- */
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState === "visible" && room && me){
+    connect();  // Daten frisch von Supabase holen
+  }
+});
 
 /* ---------- Service Worker ---------- */
 if("serviceWorker" in navigator){
