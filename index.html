@@ -3716,6 +3716,14 @@ $("rooms").addEventListener("click",(e)=>{
   if(r && n) enterRoom(r,n);
 })();
 
+/* ---------- Bei Rückkehr aus bfcache / App-Wechsel: Daten neu laden ---------- */
+window.addEventListener("pageshow", (e) => {
+  if(e.persisted && room && me) connect();
+});
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "visible" && room && me) connect();
+});
+
 /* ---------- Service Worker ---------- */
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js").catch(()=>{}));
