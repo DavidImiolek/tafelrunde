@@ -223,8 +223,9 @@
   .finger-countdown{font-family:"Oswald";font-weight:700;font-size:104px;color:var(--amber);text-shadow:0 0 30px rgba(232,163,61,.5)}
   .finger-result{font-family:"Oswald";font-weight:700;font-size:32px;color:var(--amber);text-align:center;line-height:1.5;text-transform:uppercase;letter-spacing:.02em}
   .finger-again{width:100%;margin-top:14px;padding:14px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);color:var(--foam);font-size:15px;font-weight:700}
-  .weighwinner{font-family:"Oswald";font-weight:700;font-size:26px;color:var(--amber);text-align:center;margin:10px 0 4px;text-transform:uppercase}
-  .weighpenalty{text-align:center;color:var(--muted);font-size:14px;margin-bottom:12px}
+  /* Wer würde eher? */
+  #wweCat{width:100%;padding:12px 14px;font-size:15px;border-radius:12px;background:var(--surface-2);color:var(--foam);border:1px solid var(--line);outline:none;margin-bottom:2px}
+  .wwewinner{font-family:"Oswald";font-weight:700;font-size:26px;color:var(--amber);text-align:center;margin:10px 0 4px;text-transform:uppercase}
   .weighlive .prow b{font-family:"Oswald";font-size:20px;color:var(--amber)}
   #weighBody select,#weighBody input[type="number"]{width:100%;padding:11px 12px;font-size:15px;border-radius:11px;background:var(--surface-2);color:var(--foam);border:1px solid var(--line);outline:none;margin-bottom:0}
   #weighBody .evformbtns{display:flex;gap:8px}
@@ -239,6 +240,7 @@
   .weighstat{flex:1;color:var(--muted);font-size:13px}
   .weighstrikes{color:var(--danger);font-weight:700;letter-spacing:2px;flex:none}
   .weighdone{flex:none;background:var(--surface-2);border:1px solid var(--line);color:var(--foam);border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+  .wwepenalty{text-align:center;color:var(--muted);font-size:14px;margin-bottom:12px}
   .evform input[type="datetime-local"]{color-scheme:dark;-webkit-appearance:none;appearance:none;font-family:inherit}
   .evformbtns{display:flex;gap:8px}
   .evformbtns button{flex:1;padding:12px;border-radius:12px;font-weight:600;font-size:15px}
@@ -420,7 +422,7 @@
   .racecard-txt{font-size:15px;font-weight:600;line-height:1.4;margin-bottom:10px}
   .racecard .evformbtns{display:flex;gap:8px}
   .racecard .evformbtns button{flex:1;padding:11px;border-radius:11px;font-weight:700;font-size:14px}
-  #eventsView,#gamesView,#gamesRaceView,#grillView,#fixView,#pollsView,#sayLessView,#fingerView,#photoView,#weighView{display:flex;flex-direction:column;flex:1;min-height:0}
+  #eventsView,#gamesView,#gamesRaceView,#grillView,#fixView,#pollsView,#sayLessView,#fingerView,#wweView,#photoView,#weighView{display:flex;flex-direction:column;flex:1;min-height:0}
   .racefoot b{color:var(--foam)}
   .raceevent{margin-bottom:10px}
   .raceevent .re-title{font-family:"Oswald";font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
@@ -683,6 +685,7 @@
         <button class="menuitem" id="openGamesRace"><span>🏎️ Rennen</span><span class="chev">›</span></button>
         <button class="menuitem" id="openSayLess"><span>🃏 Say Less</span><span class="chev">›</span></button>
         <button class="menuitem" id="openFingerGame"><span>👆 Fingerspiel</span><span class="chev">›</span></button>
+        <button class="menuitem" id="openWwe"><span>🗳️ Wer würde eher?</span><span class="chev">›</span></button>
         <button class="menuitem" id="openWeigh"><span>⚖️ Wiegen-Spiel</span><span class="chev">›</span></button>
       </div>
     </div>
@@ -752,6 +755,49 @@
         <div class="finger-result hidden" id="fingerResult">🍺<br>DU MUSST TRINKEN</div>
       </div>
       <button type="button" class="ghost finger-again hidden" id="fingerAgain">🔁 Nochmal</button>
+    </div>
+  </div>
+
+  <!-- Trinkspiele: Wer würde eher? -->
+  <div id="wweView" class="hidden">
+    <header class="panelbar">
+      <button class="iconbtn" id="wweBack" aria-label="Zurück zu Trinkspiele">
+        <svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg>Trinkspiele
+      </button>
+      <button class="iconbtn" id="wweClose" aria-label="Schließen" title="Schließen">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6l-12 12"/></svg>
+      </button>
+    </header>
+    <div class="panelbody">
+      <select id="wweCat">
+        <option value="">Alle Kategorien</option>
+        <option value="Lustig">Lustig</option>
+        <option value="Alkohol">Alkohol</option>
+        <option value="Dating">Dating</option>
+        <option value="Frech">Frech</option>
+        <option value="Random">Random</option>
+        <option value="Tafelrunde-Intern">Tafelrunde-Intern</option>
+      </select>
+      <button class="menuitem" id="wweNew"><span>🎲 Neue Frage</span></button>
+      <button class="menuitem" id="wweAddQ"><span>➕ Eigene Frage hinzufügen</span></button>
+      <div class="card evform hidden" id="wweQForm">
+        <input id="wweQText" placeholder="Frage (z. B. Wer würde am ehesten …)" maxlength="140" autocomplete="off" />
+        <label class="ev-label">Kategorie</label>
+        <select id="wweQCat">
+          <option value="Lustig">Lustig</option>
+          <option value="Alkohol">Alkohol</option>
+          <option value="Dating">Dating</option>
+          <option value="Frech">Frech</option>
+          <option value="Random">Random</option>
+          <option value="Tafelrunde-Intern">Tafelrunde-Intern</option>
+        </select>
+        <div class="evformbtns">
+          <button class="ghost" id="wweQCancel">Abbrechen</button>
+          <button class="primary" id="wweQCreate">Speichern</button>
+        </div>
+      </div>
+      <div id="wweQList"></div>
+      <div id="wweList"></div>
     </div>
   </div>
 
@@ -1833,6 +1879,14 @@ function slGuess(direction){
   },220);
 }
 
+/* ---------- Wer würde eher? ---------- */
+let wweRounds = [];                 // Runden dieses Raums {id,room,question,category,created_by,created_at,revealed}
+const wweVotesMap = new Map();      // roundId -> Map(voter -> target)
+let wweHistoryOpen = false;
+let wweQListOpen = false;
+let wweLastQuestion = null;
+let wweCustomQuestions = [];        // eigene Fragen dieses Raums {id,room,question,category,created_by,created_at}
+
 /* ---------- Wiegen-Spiel ---------- */
 let weighGames = [];                 // alle Spiele dieses Raums
 let weighPlayers = [];               // alle Spieler-Zeilen {game_id,room,player,start_weight,last_weight,last_weight_round,strikes,finished}
@@ -1841,6 +1895,87 @@ function currentWeighGame(){
   return [...weighGames].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))[0] || null;
 }
 function weighPlayersFor(gameId){ return weighPlayers.filter(p=>p.game_id===gameId); }
+const WWE_QUESTIONS = [
+  {cat:"Lustig", q:"Wer würde am ehesten mitten in der Nacht Pizza bestellen?"},
+  {cat:"Lustig", q:"Wer würde am ehesten in der Öffentlichkeit stolpern und so tun, als wäre nichts passiert?"},
+  {cat:"Lustig", q:"Wer würde am ehesten einen Streich spielen und dabei erwischt werden?"},
+  {cat:"Lustig", q:"Wer würde am ehesten versehentlich eine Sprachnachricht für alle hörbar abspielen?"},
+  {cat:"Alkohol", q:"Wer würde am ehesten einen Kater komplett verleugnen?"},
+  {cat:"Alkohol", q:"Wer würde am ehesten um 18 Uhr 'nur noch ein Bier' sagen und dann doch weitermachen?"},
+  {cat:"Alkohol", q:"Wer würde am ehesten betrunken einen Döner bestellen und dabei einschlafen?"},
+  {cat:"Alkohol", q:"Wer würde am ehesten am nächsten Morgen nicht mehr wissen, wie er nach Hause kam?"},
+  {cat:"Dating", q:"Wer würde am ehesten auf einem ersten Date zu viel erzählen?"},
+  {cat:"Dating", q:"Wer würde am ehesten links swipen und sich dann vertippen?"},
+  {cat:"Dating", q:"Wer würde am ehesten seinem Date ungefragt die Speisekarte erklären?"},
+  {cat:"Dating", q:"Wer würde am ehesten beim ersten Date schon von einer gemeinsamen Zukunft reden?"},
+  {cat:"Frech", q:"Wer würde am ehesten heimlich das letzte Stück vom Teller klauen?"},
+  {cat:"Frech", q:"Wer würde am ehesten eine faule Ausrede erfinden, um früher zu gehen?"},
+  {cat:"Frech", q:"Wer würde am ehesten einem Fremden einen Spitznamen geben – und ihn auch so nennen?"},
+  {cat:"Frech", q:"Wer würde am ehesten beim Bezahlen plötzlich aufs Klo müssen?"},
+  {cat:"Random", q:"Wer würde am ehesten bei Vollmond die verrückteste Idee des Abends haben?"},
+  {cat:"Random", q:"Wer würde am ehesten auf einer einsamen Insel überleben?"},
+  {cat:"Random", q:"Wer würde am ehesten eine Nachricht an die falsche Person schicken?"},
+  {cat:"Random", q:"Wer würde am ehesten mitten im Gespräch einschlafen?"},
+  {cat:"Tafelrunde-Intern", q:"Wer würde am ehesten vergessen, den nächsten Kasten zu bestellen?"},
+  {cat:"Tafelrunde-Intern", q:"Wer würde am ehesten beim Rennen schummeln wollen?"},
+  {cat:"Tafelrunde-Intern", q:"Wer würde am ehesten als Erstes trichtern?"},
+  {cat:"Tafelrunde-Intern", q:"Wer würde am ehesten die Tafelrunde-App am liebsten neu erfinden?"}
+];
+const WWE_CATEGORIES = [...new Set(WWE_QUESTIONS.map(x=>x.cat))];
+function addLocalWweVote(roundId,voter,target){
+  let m=wweVotesMap.get(roundId); if(!m){m=new Map();wweVotesMap.set(roundId,m);}
+  m.set(voter,target);
+}
+function removeLocalWweVote(roundId,voter){
+  const m=wweVotesMap.get(roundId); if(!m) return;
+  m.delete(voter);
+}
+function wweRoster(){
+  const names=new Set(members); if(me) names.add(me);
+  return [...names].sort((a,b)=>a.localeCompare(b));
+}
+function allWweQuestions(){
+  return WWE_QUESTIONS.concat(wweCustomQuestions.map(q=>({cat:q.category||"Random", q:q.question})));
+}
+function pickWweQuestion(cat){
+  const all=allWweQuestions();
+  const pool = cat ? all.filter(x=>x.cat===cat) : all;
+  if(!pool.length) return WWE_QUESTIONS[0];
+  let pick;
+  do{ pick = pool[Math.floor(Math.random()*pool.length)]; } while(pool.length>1 && wweLastQuestion===pick.q);
+  wweLastQuestion = pick.q;
+  return pick;
+}
+async function createWweQuestion(){
+  if(!supa) return;
+  const text=$("wweQText").value.trim();
+  if(!text){ toast("Bitte eine Frage eingeben"); return; }
+  const cat=$("wweQCat").value || "Random";
+  const q={ id:uuid(), room, question:text, category:cat, created_by:me, created_at:new Date().toISOString() };
+  wweCustomQuestions.push(q); renderWweQuestions();
+  $("wweQText").value=""; $("wweQForm").classList.add("hidden");
+  toast("✅ Eigene Frage hinzugefügt!");
+  const { error } = await supa.from("wwe_questions").insert(q);
+  if(error){ wweCustomQuestions=wweCustomQuestions.filter(x=>x.id!==q.id); renderWweQuestions(); toast("Nicht gespeichert"); }
+}
+async function deleteWweQuestion(id){
+  if(!supa) return;
+  const backup=wweCustomQuestions.find(x=>x.id===id);
+  wweCustomQuestions=wweCustomQuestions.filter(x=>x.id!==id); renderWweQuestions();
+  const { error } = await supa.from("wwe_questions").delete().eq("id", id);
+  if(error && backup){ wweCustomQuestions.push(backup); renderWweQuestions(); toast("Löschen fehlgeschlagen"); }
+}
+function applyWweQuestionChange(p){
+  if(p.eventType==="DELETE"){
+    const id=p.old&&p.old.id;
+    if(id) wweCustomQuestions=wweCustomQuestions.filter(x=>x.id!==id);
+  } else {
+    const row=p.new;
+    if(!wweCustomQuestions.find(x=>x.id===row.id)) wweCustomQuestions.push(row);
+  }
+  if(!$("wweView").classList.contains("hidden")) renderWweQuestions();
+}
+
 /* ---------- Wiegen-Spiel: Aktionen ---------- */
 function renderWeighIfOpen(){
   if($("weighView").classList.contains("hidden")) return;
@@ -1945,6 +2080,20 @@ async function cleanupOldWeighGames(){
     try{ await supa.from("weigh_games").delete().eq("id",g.id); }catch{}
   }
 }
+async function cleanupOldWweRounds(){
+  if(!supa || !room) return;
+  const cutoff=Date.now()-2*86400000;
+  const old=wweRounds.filter(r=>new Date(r.created_at).getTime()<cutoff);
+  if(!old.length) return;
+  const oldIds=new Set(old.map(r=>r.id));
+  wweRounds=wweRounds.filter(r=>!oldIds.has(r.id));
+  for(const id of oldIds) wweVotesMap.delete(id);
+  if(!$("wweView").classList.contains("hidden")) renderWwe();
+  for(const r of old){
+    try{ await supa.from("wwe_votes").delete().eq("round_id",r.id); }catch{}
+    try{ await supa.from("wwe_rounds").delete().eq("id",r.id); }catch{}
+  }
+}
 async function evaluateWeighRound(gameId){
   const g=weighGames.find(x=>x.id===gameId); if(!g || g.target_weight==null) return;
   const active=weighPlayers.filter(p=>p.game_id===gameId && !p.finished);
@@ -1980,8 +2129,8 @@ function renderWeigh(){
       const maxStrikes=Math.max(0,...players.map(p=>p.strikes));
       const losers=players.filter(p=>p.strikes===maxStrikes && maxStrikes>0);
       resultHtml = `<section class="card">
-        <div class="weighwinner">🥴 ${losers.length?losers.map(p=>esc(p.player)).join(" & "):"Niemand"}</div>
-        <div class="weighpenalty">${losers.length?`verliert mit ${maxStrikes} Strichen – Shot fällig! 🥃`:"Unentschieden ohne Striche."}</div>
+        <div class="wwewinner">🥴 ${losers.length?losers.map(p=>esc(p.player)).join(" & "):"Niemand"}</div>
+        <div class="wwepenalty">${losers.length?`verliert mit ${maxStrikes} Strichen – Shot fällig! 🥃`:"Unentschieden ohne Striche."}</div>
         <div class="pollopts">${players.sort((a,b)=>b.strikes-a.strikes).map(p=>`<div class="pollopt" style="pointer-events:none"><span class="poll-opt-label">${esc(p.player)}</span><span class="poll-opt-count">${p.strikes} ✗</span></div>`).join("")}</div>
       </section>`;
     }
@@ -1994,8 +2143,7 @@ function renderWeigh(){
 
   const players=weighPlayersFor(g.id);
   const joined = players.map(p=>p.player);
-  const allNames = new Set(members); if(me) allNames.add(me);
-  const notJoined = [...allNames].sort((a,b)=>a.localeCompare(b)).filter(n=>!joined.includes(n));
+  const notJoined = wweRoster().filter(n=>!joined.includes(n));
 
   if(g.status==="setup"){
     const pending = players.filter(p=>p.start_weight==null);
@@ -2121,6 +2269,117 @@ function renderWeigh(){
   el.querySelectorAll("[data-weigh-finish]").forEach(btn=>btn.addEventListener("click", ()=>markWeighFinished(g.id, btn.getAttribute("data-weigh-finish"))));
   if(allReady) $("weighEval").addEventListener("click", ()=>evaluateWeighRound(g.id));
   $("weighAbort").addEventListener("click", ()=>endWeighGame(g.id));
+}
+function renderWweQuestions(){
+  const el=$("wweQList"); if(!el) return;
+  if(!wweCustomQuestions.length){ el.innerHTML=""; return; }
+  const sorted=[...wweCustomQuestions].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+  let html = `<button class="pasttoggle" id="wweQListToggle" aria-expanded="${wweQListOpen?'true':'false'}">
+    <span>🗂 Eigene Fragen (${sorted.length})</span><span class="chev">${wweQListOpen?'▾':'▸'}</span>
+  </button>`;
+  if(wweQListOpen){
+    html += sorted.map(q=>{
+      const del = q.created_by===me ? `<button class="evdel" data-wweq-del="${q.id}">löschen</button>` : "";
+      return `<div class="evitem">${del}<div class="evmeta" style="margin-bottom:4px">🏷️ ${esc(q.category||"Random")}</div><h4>${esc(q.question)}</h4></div>`;
+    }).join("");
+  }
+  el.innerHTML = html;
+}
+async function createWweRound(){
+  if(!supa) return;
+  const cat = $("wweCat").value || "";
+  const picked = pickWweQuestion(cat);
+  const round = { id:uuid(), room, question:picked.q, category:picked.cat, created_by:me, created_at:new Date().toISOString(), revealed:false };
+  wweRounds.push(round); renderWwe();
+  const { error } = await supa.from("wwe_rounds").insert(round);
+  if(error){ wweRounds=wweRounds.filter(x=>x.id!==round.id); renderWwe(); toast("Runde nicht gespeichert"); }
+}
+async function voteWwe(roundId, target){
+  if(!supa || !me) return;
+  addLocalWweVote(roundId,me,target); renderWwe();
+  const row={ round_id:roundId, room, voter:me, target, updated_at:new Date().toISOString() };
+  const { error } = await supa.from("wwe_votes").upsert(row,{onConflict:"round_id,voter"});
+  if(error) toast("Stimme nicht gespeichert");
+}
+async function revealWwe(roundId){
+  if(!supa) return;
+  const r=wweRounds.find(x=>x.id===roundId); if(!r) return;
+  r.revealed=true; renderWwe();
+  const { error } = await supa.from("wwe_rounds").update({revealed:true}).eq("id",roundId);
+  if(error){ r.revealed=false; renderWwe(); toast("Konnte nicht aufgedeckt werden"); }
+}
+function applyWweRoundChange(p){
+  if(p.eventType==="DELETE"){
+    const id=p.old&&p.old.id;
+    if(id){ wweRounds=wweRounds.filter(x=>x.id!==id); wweVotesMap.delete(id); }
+  } else {
+    const row=p.new;
+    const i=wweRounds.findIndex(x=>x.id===row.id);
+    if(i>=0) wweRounds[i]=row; else wweRounds.push(row);
+  }
+  if(!$("wweView").classList.contains("hidden")) renderWwe();
+}
+function applyWweVoteChange(p){
+  if(p.eventType==="DELETE"){
+    const o=p.old;
+    if(o && o.round_id && o.voter) removeLocalWweVote(o.round_id,o.voter);
+  } else {
+    const r=p.new;
+    addLocalWweVote(r.round_id,r.voter,r.target);
+  }
+  if(!$("wweView").classList.contains("hidden")) renderWwe();
+}
+function wweRoundHtml(round, interactive){
+  const votes=wweVotesMap.get(round.id) || new Map();
+  const tally=new Map();
+  for(const target of votes.values()) tally.set(target,(tally.get(target)||0)+1);
+  const totalVotes=votes.size;
+  const myVote=votes.get(me);
+  const roster=wweRoster();
+  let body;
+  if(round.revealed){
+    let winner=null, max=0;
+    for(const [p,c] of tally){ if(c>max){max=c;winner=p;} }
+    const optHtml=roster.map(p=>{
+      const c=tally.get(p)||0, pct=max?Math.round(c/max*100):0;
+      return `<div class="pollopt" style="pointer-events:none"><span class="fill" style="transform:scaleX(${pct/100})"></span><span class="poll-opt-label">${p===winner?'👑 ':''}${esc(p)}</span><span class="poll-opt-count">${c}</span></div>`;
+    }).join("");
+    body = `<div class="wwewinner">🏆 ${winner?esc(winner):"Niemand gewählt"}</div>
+      ${winner?`<div class="wwepenalty">🍺 ${esc(winner)} trinkt einen Schluck!</div>`:""}
+      <div class="pollopts">${optHtml}</div>`;
+  } else {
+    const optHtml=roster.map(p=>{
+      const mine=myVote===p;
+      return interactive
+        ? `<button type="button" class="pollopt ${mine?'mine':''}" data-wwe-vote="${round.id}" data-wwe-target="${esc(p)}"><span class="poll-opt-label">${mine?'✓ ':''}${esc(p)}</span></button>`
+        : `<div class="pollopt" style="pointer-events:none"><span class="poll-opt-label">${mine?'✓ ':''}${esc(p)}</span></div>`;
+    }).join("");
+    body = `<div class="evmeta">${totalVotes} von ${roster.length} haben abgestimmt</div>
+      <div class="pollopts">${optHtml}</div>
+      ${interactive?`<button type="button" class="polladdopt" data-wwe-reveal="${round.id}">🔓 Ergebnis aufdecken</button>`:""}`;
+  }
+  return `<div class="evitem">
+    <div class="evmeta" style="margin-bottom:6px">🏷️ ${esc(round.category||"Random")}</div>
+    <h4>${esc(round.question)}</h4>
+    ${body}
+  </div>`;
+}
+function renderWwe(){
+  const el=$("wweList"); if(!el) return;
+  if(!wweRounds.length){
+    el.innerHTML=`<div class="empty">Noch keine Runde gestartet.<br>Tippe oben auf <b>🎲 Neue Frage</b>. 🗳️</div>`;
+    return;
+  }
+  const sorted=[...wweRounds].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+  const [current,...older]=sorted;
+  let html = wweRoundHtml(current, true);
+  if(older.length){
+    html += `<button class="pasttoggle" id="wweHistoryToggle" aria-expanded="${wweHistoryOpen?'true':'false'}">
+      <span>🗂 Frühere Runden (${older.length})</span><span class="chev">${wweHistoryOpen?'▾':'▸'}</span>
+    </button>`;
+    if(wweHistoryOpen) html += older.map(r=>wweRoundHtml(r,false)).join("");
+  }
+  el.innerHTML = html;
 }
 function fmtWhen(iso){
   if(!iso) return "Zeit offen";
@@ -2654,7 +2913,7 @@ async function setRaceVehicle(planId,vehicleId){
   if(error) toast("Fahrzeug nicht gespeichert");
 }
 
-const ALL_SUBVIEWS=["menuList","statsView","fixView","eventsView","gamesView","gamesRaceView","grillView","pollsView","sayLessView","fingerView","photoView","weighView"];
+const ALL_SUBVIEWS=["menuList","statsView","fixView","eventsView","gamesView","gamesRaceView","grillView","pollsView","sayLessView","fingerView","wweView","photoView","weighView"];
 function hideAllSubviews(){ for(const id of ALL_SUBVIEWS) $(id).classList.add("hidden"); }
 function showMenuList(){ hideAllSubviews(); $("menuList").classList.remove("hidden"); }
 function showGamesMenu(){ hideAllSubviews(); $("gamesView").classList.remove("hidden"); }
@@ -2664,6 +2923,7 @@ function openGames(){ hideAllSubviews(); $("gamesView").classList.remove("hidden
 function openGamesRace(){ renderGames(); hideAllSubviews(); $("gamesRaceView").classList.remove("hidden"); }
 function openSayLess(){ slNewGame(); hideAllSubviews(); $("sayLessView").classList.remove("hidden"); }
 function openFingerGame(){ fingerReset(); hideAllSubviews(); $("fingerView").classList.remove("hidden"); }
+function openWwe(){ renderWwe(); renderWweQuestions(); $("wweQForm").classList.add("hidden"); hideAllSubviews(); $("wweView").classList.remove("hidden"); }
 function openWeigh(){ renderWeigh(); hideAllSubviews(); $("weighView").classList.remove("hidden"); }
 function openGrill(){ renderGrill(); hideAllSubviews(); $("grillView").classList.remove("hidden"); }
 function openPhotos(){ renderPhotoGallery(); hideAllSubviews(); $("photoView").classList.remove("hidden"); }
@@ -2778,6 +3038,11 @@ async function connect(){
   polls=[]; pollVotesMap.clear();
   try{ const por=await supa.from("polls").select("*").eq("room",room); if(!por.error&&por.data) polls=por.data.map(p=>({...p,options:normalizePollOptions(p.options)})); }catch{}
   try{ const pvr=await supa.from("poll_votes").select("*").eq("room",room); if(!pvr.error&&pvr.data) for(const v of pvr.data) addLocalPollVote(v.poll_id,v.player,v.option_idx); }catch{}
+  wweRounds=[]; wweVotesMap.clear();
+  try{ const wrr=await supa.from("wwe_rounds").select("*").eq("room",room); if(!wrr.error&&wrr.data) wweRounds=wrr.data; }catch{}
+  try{ const wvr=await supa.from("wwe_votes").select("*").eq("room",room); if(!wvr.error&&wvr.data) for(const v of wvr.data) addLocalWweVote(v.round_id,v.voter,v.target); }catch{}
+  wweCustomQuestions=[];
+  try{ const wqr=await supa.from("wwe_questions").select("*").eq("room",room); if(!wqr.error&&wqr.data) wweCustomQuestions=wqr.data; }catch{}
   weighGames=[]; weighPlayers=[]; scaleLive=null;
   try{ const wgr=await supa.from("weigh_games").select("*").eq("room",room); if(!wgr.error&&wgr.data) weighGames=wgr.data; }catch{}
   try{ const wpr=await supa.from("weigh_players").select("*").eq("room",room); if(!wpr.error&&wpr.data) weighPlayers=wpr.data; }catch{}
@@ -2785,6 +3050,7 @@ async function connect(){
   render();
   setTimeout(catchUpGroupMilestones, 700);   // verpasste Meilensteine seit dem letzten Öffnen nachholen
   setTimeout(cleanupOldWeighGames, 1200);    // Wiegen-Spiele älter als 2 Tage aufräumen
+  setTimeout(cleanupOldWweRounds, 1200);     // Wer-würde-eher-Runden älter als 2 Tage aufräumen
 
   // 2) live mithören
   if(channel) supa.removeChannel(channel);
@@ -2816,6 +3082,15 @@ async function connect(){
     .on("postgres_changes",
       { event:"*", schema:"public", table:"poll_votes", filter:`room=eq.${room}` },
       (p)=>{ applyPollVoteChange(p); })
+    .on("postgres_changes",
+      { event:"*", schema:"public", table:"wwe_rounds", filter:`room=eq.${room}` },
+      (p)=>{ applyWweRoundChange(p); })
+    .on("postgres_changes",
+      { event:"*", schema:"public", table:"wwe_votes", filter:`room=eq.${room}` },
+      (p)=>{ applyWweVoteChange(p); })
+    .on("postgres_changes",
+      { event:"*", schema:"public", table:"wwe_questions", filter:`room=eq.${room}` },
+      (p)=>{ applyWweQuestionChange(p); })
     .on("postgres_changes",
       { event:"*", schema:"public", table:"weigh_games", filter:`room=eq.${room}` },
       (p)=>{ applyWeighGameChange(p); })
@@ -2937,7 +3212,6 @@ if("serviceWorker" in navigator){
       sendReaction(evt.data.room, evt.data.originalPlayer, evt.data.reaction);
     }
     if(evt.data && evt.data.type === "GET_PLAYER"){
-      // Spielernamen an SW zurückgeben
       evt.source?.postMessage?.({ type: "PLAYER_NAME", player: me || "Jemand" });
     }
   });
@@ -3086,7 +3360,7 @@ function renderRooms(){
 function leaveRoom(){
   const prevRoom = room;
   if(channel){ supa.removeChannel(channel); channel=null; }
-  events.clear(); members.clear(); plans=[]; rsvpMap.clear(); grills=[]; polls=[]; pollVotesMap.clear(); weighGames=[]; weighPlayers=[]; scaleLive=null; activeEvent=null; room=null; me=null;
+  events.clear(); members.clear(); plans=[]; rsvpMap.clear(); grills=[]; polls=[]; pollVotesMap.clear(); wweRounds=[]; wweVotesMap.clear(); wweCustomQuestions=[]; weighGames=[]; weighPlayers=[]; scaleLive=null; activeEvent=null; room=null; me=null;
   closeMenu();
   $("app").classList.add("hidden");
   $("join").classList.remove("hidden");
@@ -3139,9 +3413,30 @@ $("openFingerGame").addEventListener("click", openFingerGame);
 $("fingerBack").addEventListener("click", ()=>{ fingerReset(); showGamesMenu(); });
 $("fingerClose").addEventListener("click", ()=>{ fingerReset(); closeMenu(); });
 $("fingerAgain").addEventListener("click", fingerReset);
+$("openWwe").addEventListener("click", openWwe);
+$("wweBack").addEventListener("click", showGamesMenu);
+$("wweClose").addEventListener("click", closeMenu);
 $("openWeigh").addEventListener("click", openWeigh);
 $("weighBack").addEventListener("click", showGamesMenu);
 $("weighClose").addEventListener("click", closeMenu);
+$("wweNew").addEventListener("click", createWweRound);
+$("wweAddQ").addEventListener("click", ()=>$("wweQForm").classList.toggle("hidden"));
+$("wweQCancel").addEventListener("click", ()=>$("wweQForm").classList.add("hidden"));
+$("wweQCreate").addEventListener("click", createWweQuestion);
+$("wweQList").addEventListener("click",(e)=>{
+  const t=e.target.closest("#wweQListToggle");
+  if(t){ wweQListOpen=!wweQListOpen; renderWweQuestions(); return; }
+  const d=e.target.closest("[data-wweq-del]");
+  if(d) deleteWweQuestion(d.getAttribute("data-wweq-del"));
+});
+$("wweList").addEventListener("click",(e)=>{
+  const hist=e.target.closest("#wweHistoryToggle");
+  if(hist){ wweHistoryOpen=!wweHistoryOpen; renderWwe(); return; }
+  const v=e.target.closest("[data-wwe-vote]");
+  if(v){ voteWwe(v.getAttribute("data-wwe-vote"), v.getAttribute("data-wwe-target")); return; }
+  const r=e.target.closest("[data-wwe-reveal]");
+  if(r) revealWwe(r.getAttribute("data-wwe-reveal"));
+});
 $("openGrill").addEventListener("click", openGrill);
 $("grillBack").addEventListener("click", showMenuList);
 $("grillClose").addEventListener("click", closeMenu);
@@ -3420,13 +3715,6 @@ $("rooms").addEventListener("click",(e)=>{
   $("room").value = r||"";
   if(r && n) enterRoom(r,n);
 })();
-
-/* ---------- Bei Rückkehr in den Vordergrund neu laden (iPhone PWA Fix) ---------- */
-document.addEventListener("visibilitychange", ()=>{
-  if(document.visibilityState === "visible" && room && me){
-    connect();  // Daten frisch von Supabase holen
-  }
-});
 
 /* ---------- Service Worker ---------- */
 if("serviceWorker" in navigator){
