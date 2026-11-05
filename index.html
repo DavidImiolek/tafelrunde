@@ -3015,8 +3015,8 @@ async function fixRemove(player){
 async function connect(){
   if(!supa){ setLive(false,"Nicht verbunden"); toast("Noch nicht mit Supabase verbunden – Keys folgen in Schritt 3."); return; }
   setLive(false,"Verbinde…");
-  // 1) bestehende Events dieses Raums laden
-  const { data, error } = await supa.from("events").select("*").eq("room", room);
+  // 1) bestehende Events dieses Raums laden (max 5000, neueste zuerst)
+  const { data, error } = await supa.from("events").select("*").eq("room", room).order("created_at",{ascending:false}).limit(5000);
   if(error){ toast("Laden fehlgeschlagen – Verbindung prüfen"); setLive(false,"Offline"); return; }
   events.clear();
   for(const e of data) events.set(e.id, e);
