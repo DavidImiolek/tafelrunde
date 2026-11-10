@@ -455,7 +455,8 @@
 
   /* ── Bierlandkarte ── */
   #beerMapView{display:flex;flex-direction:column;flex:1;min-height:0}
-  .map-wrap{position:relative;flex:1;min-height:260px;overflow:hidden;border-radius:14px;background:#1a1a2e;touch-action:none;margin:8px 0}
+  .bm-label{fill:#222;font-family:system-ui,sans-serif;font-weight:600;opacity:.7;text-shadow:0 0 2px #fff,0 0 2px #fff;}
+.map-wrap{position:relative;flex:1;min-height:260px;overflow:hidden;border-radius:14px;background:#1a1a2e;touch-action:none;margin:8px 0}
   .map-wrap svg{width:100%;height:100%;display:block}
   .map-wrap svg path{fill:#2a2a3e;stroke:#3a3a5e;stroke-width:.3;cursor:pointer;transition:fill .2s}
   .map-wrap svg path.visited{cursor:pointer}
@@ -4265,6 +4266,29 @@ function renderBeerMap(){
     paths.forEach(p=>{ p.style.fill=color; p.classList.add("visited"); });
     ci++;
   }
+  // Add country name labels
+  mapSvg.querySelectorAll(".bm-label").forEach(el=>el.remove());
+  mapSvg.querySelectorAll("path[id], g[id]").forEach(el=>{
+    const code=(el.tagName==="g"?el:el).id;
+    if(!code||code.startsWith("_")) return;
+    const name=BM_COUNTRIES[code.toUpperCase()];
+    if(!name) return;
+    const target=el.tagName==="g"?el.querySelector("path"):el;
+    if(!target) return;
+    const bb=target.getBBox();
+    const tx=bb.x+bb.width/2, ty=bb.y+bb.height/2;
+    const label=document.createElementNS("http://www.w3.org/2000/svg","text");
+    label.setAttribute("x",tx); label.setAttribute("y",ty);
+    label.setAttribute("class","bm-label");
+    label.setAttribute("text-anchor","middle");
+    label.setAttribute("dominant-baseline","central");
+    label.setAttribute("pointer-events","none");
+    const area=bb.width*bb.height;
+    label.setAttribute("font-size", area>400?"4":area>100?"2.5":"1.5");
+    label.textContent=name;
+    mapSvg.appendChild(label);
+  });
+
   $("bmCounter").textContent=`${byCountry.size} ${byCountry.size===1?"Land":"Länder"} entdeckt · ${bmData.length} Biere`;
 
   // Click handler on countries
