@@ -3414,7 +3414,7 @@ function openGrill(){ renderGrill(); hideAllSubviews(); $("grillView").classList
 function openPhotos(){ renderPhotoGallery(); hideAllSubviews(); $("photoView").classList.remove("hidden"); }
 function openFix(){ fixOffset=0; renderFix(); hideAllSubviews(); $("fixView").classList.remove("hidden"); }
 function openPolls(){ renderPolls(); $("pollForm").classList.add("hidden"); hideAllSubviews(); $("pollsView").classList.remove("hidden"); }
-function openBeerMap(){ loadBeerMap(); hideAllSubviews(); $("beerMapView").classList.remove("hidden"); }
+function openBeerMap(){ hideAllSubviews(); $("beerMapView").classList.remove("hidden"); loadBeerMap(); }
 function closeMenu(){ $("menuPanel").classList.add("hidden"); }
 
 async function shareRoom(){
