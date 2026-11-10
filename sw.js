@@ -1,6 +1,6 @@
 // Service Worker für Prost – Bierzähler
 // Version bei jeder Änderung hochzählen, damit Geräte die neue Version holen.
-const CACHE = "tafelrunde-v16";
+const CACHE = "tafelrunde-v17";
 const SHELL = [
   "./",
   "./index.html",
